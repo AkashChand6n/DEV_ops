@@ -9,4 +9,4 @@ print(cat.split()[0])
 print(cat[0])
 print(cat[len(cat)-1])
 print(cat.index(cat[-1]))
-print
+print(cat.index)
