@@ -8,3 +8,6 @@ System administration (user management, backups, etc.)
 Automating software installations and updates
 Running programs and scripts in the background
 Text processing and manipulation
+
+
+This is the link to the repo: https://github.com/AkashChand6n/Shell
