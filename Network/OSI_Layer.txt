@@ -1,0 +1,44 @@
+1.Client-Server Model
+
+    The Client-Server Model is a network architecture in which one device (the client) requests services or resources, and another device (the server) provides those services or resources.
+    Client	-   device that requests resources
+    Server  -   device that provides resources
+
+2.OSI (Open Systems Interconnection)
+
+Physical Layer (Layer 1)
+    Responsible for the actual physical connection between the devices
+    Specifies the physical medium, signaling methods, and hardware interfaces.
+    Physical layer contains information in the form of bits                         //bits
+
+Data Link Layer (Layer 2)
+    Responsible for node-to-node data transfer
+    error detection/correction
+    Flow Control
+    Organizes data into frames                                                      //frames
+
+Network Layer (Layer 3)
+    Routing of data packets between devices
+    The best route for delivery
+    Segment in the Network layer is referred to as Packet                           //Packet
+
+Transport Layer (Layer 4)
+    Ensures data is correctly ordered and reassembled.
+    The transport layer also provides the acknowledgment of the successful data transmission and re-transmits the data if an error is found.
+
+    TCP - Connection-Oriented Service
+    UDP - Connection-less Service
+
+Session Layer (Layer 5)
+    Responsible for connections(Session Establishment, Maintenance, and Termination)
+    
+    Dialog Controller
+        The session layer allows two systems to start communication with each other in half-duplex or full-duplex
+
+Presentation Layer (layer 6)
+    Formatting
+    encryption
+        process used to secure data by converting it from its original, readable form into an unreadable format using an algorithm and a key
+
+Application Layer   (Layer 7)
+    This layer interacts directly with application software
