@@ -9,3 +9,4 @@ print("The sorted list is:",sorted_list)
 print("max of list is:",sorted_list[-1])
 print("min of list is:",sorted_list[0])
 #sorted() function returns a new list of sorted elements
+
