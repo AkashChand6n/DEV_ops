@@ -8,3 +8,6 @@ except ZeroDivisionError:
 
 except ValueError:
     print("Value error")
+
+finally:
+    print("finally is executed")
