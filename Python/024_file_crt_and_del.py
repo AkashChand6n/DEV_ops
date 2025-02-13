@@ -22,7 +22,7 @@ def delete_file(directory, filename):
 # Ask for user input
 directory = input("Enter the directory: ")
 action = input("Do you want to create or delete a file? (create/delete): ").strip().lower()
-filename = input("Enter the filename: ").strip()
+filename = input("Enter the filename: ").strip() #strip the whitespace 
 
 # Perform the requested action
 if action == "create":
