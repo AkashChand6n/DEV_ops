@@ -1,0 +1,215 @@
+docker 
+    container
+    Docker is an open-source platform that automates the deployment, scaling, and management of applications using containerization. 
+    Containers are lightweight, standalone, executable packages that include everything needed to run an application—code, runtime, system tools, libraries, and settings—ensuring consistency across different environments.
+
+docker with kernel
+how docker work with windows(WSL)
+    bare metal container
+    hyper V
+
+docker is lightweight
+    Docker's architecture, each containerized application runs as a process on the host machine,
+    utilizing the host's kernel but operating within isolated environments. 
+    This design ensures that while containers share the host's resources, they remain separated from each other, providing both efficiency and security.
+
+
+docker Image
+    one Image and multiple container
+    starting from an Image
+    Image are readonly file system
+
+    container are always crted from Image
+    Image can be local - if not found then look for remote
+    Image can be created from Docker file and using docker container[Using Docker commit command]
+
+    docker clinet 
+    the docker client talk to the server using REST API calls
+    docker server - also known as docker demon
+
+    docker run hello-world
+        check the local for Image
+        if found create the container
+        else check the hub.docker.com
+        and create the container
+
+    detached mode 
+        docker run -d <docker_id>
+
+    get inside container
+        docker run -it <docker_id>
+
+    docker run always create a new container
+
+Docker 4 major things-
+    images --> docker image
+    network --> docker network
+    data volumes --> docker volume
+    conatiners --> docker conainer
+
+DockerFile
+    A Dockerfile is a script containing a set of instructions to automate the creation of a Docker image.
+    It defines the base image, dependencies, environment variables, and commands needed to configure and run an application inside a container
+
+    A Dockerfile typically consists of the following key instructions:
+
+                                 FROM – Specifies the base image (e.g., python:3.9, ubuntu:20.04).
+                                 WORKDIR – Sets the working directory inside the container.
+                                 COPY – Copies files from the host machine to the container.
+                                 RUN – Executes commands (e.g., installing dependencies).
+                                 CMD or ENTRYPOINT – Defines the command that runs when the container starts.
+                                 EXPOSE – Specifies the port the container listens on.
+                                 ENV – Sets environment variables.
+
+
+how 2 vm communicate differ
+    file system
+    network
+    hostname
+    users
+    processes
+    interprocess communication
+
+    Name Spaces
+
+cow
+    copy on write
+    thats why Image are readonly
+    check the container if this libery is there and check the layer 
+
+docker container prune -> remove all stopped container
+
+root folder for docker
+    /var/lib/docker
+
+4 layers of the Image
+    LowerDir - they store the Image
+    upperDir - they store the Image
+    WorkDir - only on run time,ref on the Image
+    MergedDir - only on run time
+
+control group
+    Control Groups (cgroups) in Docker are a Linux kernel feature used to limit, prioritize, and monitor the resource usage (CPU, memory, disk I/O, network) of containers. 
+    Docker leverages cgroups to ensure that containers get the required resources without affecting other processes on the host.
+
+Docker network
+    Docker create a docker 0 as the network switch
+    create an entry in the ip table
+    ip range -172.17.0.0/16 (172.17.0.1 - 172.17.255.254)
+    container connect using virtual cable - v-eth
+
+    docker can support 6 network
+        we use only 3
+            bridge network
+            host network
+            none network
+    
+    if we connect to the host it will connect to the host device
+
+WORKDIR : WORKDIR instruction is used to set the working directory for any subsequent commands that follow it. 
+    If the directory doesn’t already exist, Docker will create it. 
+    It is useful for simplifying the management of file paths within the container. 
+
+RUN : RUN instruction in a Dockerfile is used to execute commands inside the container during the build process. 
+    Each RUN command creates a new layer in the Docker image.
+
+COPY : COPY instruction in a Dockerfile is used to copy files or directories from the host machine
+
+EXPOSE : EXPOSE instruction in a Dockerfile is used to inform Docker that the container will listen on the specified network ports at runtime.
+
+LABEL : LABEL is used to add metadata to the image, such as version, description, or maintainer information.
+
+ENC : ENV instruction sets environment variables in the container.
+
+ARG : ARG defines build-time variables that can be passed to the Docker build command.
+
+VOLUME : VOLUME instruction creates a mount point with a specified path and marks it as a volume, which means it can be shared between containers or persisted beyond container removal.
+
+ENTRYPOINT : ENTRYPOINT allows you to define a command that will be executed when the container starts.
+
+CMD : CMD defines the default command to run when the container is started. If both CMD and ENTRYPOINT are specified, CMD provides default arguments to the ENTRYPOINT.
+
+
+
+DOCKER command
+---------------
+docker run -p 80:80 nginx --> create a nginx container -p for port forwarding 80 to 80
+
+docker attach --> connect to the PID 1 on the container
+
+docker ps --> current running container
+    -a shows the stopped container as well
+
+docker exec -it <container_name> bash --> run command inside the container
+
+
+Docker conainer
+---------------
+docker run -it ubuntu bash
+docker run -d -p 8080:80 nginx [host:container]
+docker run --name my_nginx -d nginx [Custom name]
+
+docker ps --> current running container
+docker ps -a --> show all container
+
+docker start <container_id> --> start container
+docker stop <container_id> --> stop container
+docker restart <container_id> --> restart container
+docker kill <container_id> -->  kill container
+
+docker rm <container_id> --> remove container
+docker container prune --> remove all stopped container
+docker rm -f <container_id> --. remove force fully
+
+docker exec -it <container_id> bash --> connect to running container
+docker attach <container_id> --> attach to running process
+
+docker cp myfile.txt <container_id>:/app/ --> host to container file transfer
+docker cp <container_id>:/app/myfile.txt . --> container to host file transfer
+
+docker inspect <container_id> --> more info about the conainer
+docker stats --> Docker stats
+
+docker commit <container_id> my_custom_image --> conainer to image
+docker container prune --> remove all stopped container
+docker system prune -a --> remove image,network,volume
+
+
+Docker image
+----------------
+
+docker images --> docker images
+docker images ls --> docker image list
+
+docker pull ubuntu:latest [default is latest]
+
+docker rmi image_id1 image_id2 --> remove image
+docker image prune --> remove all unused image
+docker rmi $(docker images -q) --> remove all unused image . $(docker images -q) is used to get the image id
+
+Docker volumes
+------------------
+
+docker volume create my_volume --> create volume
+docker volume ls --> list volume
+docker volume inspect my_volume --> inspect volume
+docker volume rm my_volume --> remove volume
+docker volume prune --> remove all unused volume
+
+docker run -d -v /home/user/data:/app/data ubuntu --> binding volume
+docker run -v my_named_volume:/data ubuntu --> named volume
+docker run -v /data ubuntu --> anonmous volume
+docker run -v my_volume:/app/data:ro ubuntu --> change to read only
+
+Docker network
+------------------
+
+docker network create my_network --> create network
+docker network ls --> list network
+docker network inspect my_network --> inspect network
+docker network rm my_network --> remove network
+docker network prune --> remove all unused network
+
+
+
+
