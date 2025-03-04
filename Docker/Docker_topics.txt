@@ -156,6 +156,8 @@ docker start <container_id> --> start container
 docker stop <container_id> --> stop container
 docker restart <container_id> --> restart container
 docker kill <container_id> -->  kill container
+docker pause --> pause container
+docker unpause --> unpause container
 
 docker rm <container_id> --> remove container
 docker container prune --> remove all stopped container
@@ -172,14 +174,14 @@ docker stats --> Docker stats
 
 docker commit <container_id> my_custom_image --> conainer to image
 docker container prune --> remove all stopped container
-docker system prune -a --> remove image,network,volume
+docker system prune -a --> remove image,network,container
 
 
 Docker image
 ----------------
 
 docker images --> docker images
-docker images ls --> docker image list
+docker image ls --> docker image list
 
 docker pull ubuntu:latest [default is latest]
 
@@ -189,6 +191,7 @@ docker rmi $(docker images -q) --> remove all unused image . $(docker images -q)
 
 Docker volumes
 ------------------
+work with docker volume
 
 docker volume create my_volume --> create volume
 docker volume ls --> list volume
@@ -210,6 +213,13 @@ docker network inspect my_network --> inspect network
 docker network rm my_network --> remove network
 docker network prune --> remove all unused network
 
+Docker compose
+------------------
+
+Docker compose -f <filename> up -d --> Is used to create and run the container
+        -f is used to give the file.yml
+        up - is build and run
+        -d detached mode
 
 
 
