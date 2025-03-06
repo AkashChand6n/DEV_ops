@@ -220,6 +220,6 @@ Docker compose -f <filename> up -d --> Is used to create and run the container
         -f is used to give the file.yml
         up - is build and run
         -d detached mode
-
+docker compose --profile <p_name> up --> docker profile is used only to run that profile when its called
 
 
