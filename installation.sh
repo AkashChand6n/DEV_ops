@@ -23,10 +23,6 @@ apt update
 echo "⚙️ Installing Jenkins..."
 apt install -y jenkins
 
-echo "🔧 Giving Jenkins user access to Docker..."
-usermod -aG docker jenkins
-chown root:docker /var/run/docker.sock
-
 echo "🔓 Granting sudo access to Jenkins user..."
 echo "jenkins ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/jenkins
 chmod 440 /etc/sudoers.d/jenkins
@@ -35,6 +31,10 @@ echo "🐳 Installing Docker..."
 curl -fsSL https://get.docker.com -o get-docker.sh
 sh get-docker.sh
 rm get-docker.sh
+
+echo "🔧 Adding Jenkins user to Docker group..."
+usermod -aG docker jenkins
+chown root:docker /var/run/docker.sock
 
 echo "☸️ Setting up Kubernetes (k8s)..."
 
