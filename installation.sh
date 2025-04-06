@@ -86,3 +86,22 @@ apt-get update -y
 apt-get install -y kubelet kubeadm kubectl
 
 echo "✅ Setup complete! Jenkins, Docker, and Kubernetes are installed and configured."
+
+# Ask if user wants to install python3-pip
+read -p "❓ Do you want to install python3-pip? [y/N]: " install_pip
+if [[ "$install_pip" =~ ^[Yy]$ ]]; then
+    echo "📦 Installing python3-pip..."
+    apt install -y python3-pip
+else
+    echo "⏭️ Skipping python3-pip installation."
+fi
+
+# Ask if user wants to install Maven
+read -p "❓ Do you want to install Maven? [y/N]: " install_maven
+if [[ "$install_maven" =~ ^[Yy]$ ]]; then
+    echo "📦 Installing Maven..."
+    apt install -y maven
+else
+    echo "⏭️ Skipping Maven installation."
+fi
+
