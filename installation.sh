@@ -1,5 +1,5 @@
 #!/bin/bash
-# Made with the help of Chatgpt
+# Made with the help of ChatGPT
 # Exit immediately if a command exits with a non-zero status.
 set -e
 
@@ -85,8 +85,6 @@ echo "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.
 apt-get update -y
 apt-get install -y kubelet kubeadm kubectl
 
-echo "✅ Setup complete! Jenkins, Docker, and Kubernetes are installed and configured."
-
 # Ask if user wants to install python3-pip
 read -p "❓ Do you want to install python3-pip? [y/N]: " install_pip
 if [[ "$install_pip" =~ ^[Yy]$ ]]; then
@@ -105,3 +103,23 @@ else
     echo "⏭️ Skipping Maven installation."
 fi
 
+# Ask if user wants to install Ansible
+read -p "❓ Do you want to install Ansible? [y/N]: " install_ansible
+if [[ "$install_ansible" =~ ^[Yy]$ ]]; then
+    echo "📦 Installing Ansible dependencies..."
+    apt install -y software-properties-common
+    
+    echo "🔑 Adding Ansible PPA..."
+    apt-add-repository -y ppa:ansible/ansible
+    apt update
+    
+    echo "⚙️ Installing Ansible..."
+    apt install -y ansible
+    
+    echo "✅ Ansible installed successfully!"
+    echo "ℹ️ Version info: $(ansible --version | head -n 1)"
+else
+    echo "⏭️ Skipping Ansible installation."
+fi
+
+echo "✅ Setup complete! Jenkins, Docker, and Kubernetes are installed and configured."
