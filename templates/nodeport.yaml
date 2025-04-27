@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-app-service
+  labels:
+    app: my-app
+spec:
+  type: NodePort  # Exposes the app externally via Node IP and Port
+  selector:
+    app: my-app
+  ports:
+    - protocol: TCP
+      port: 80         # Cluster-internal port
+      targetPort: 8080 # Container port inside the pod
+      nodePort: 30036  # External port on the Node (range: 30000-32767)

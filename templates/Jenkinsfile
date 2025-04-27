@@ -1,0 +1,51 @@
+pipeline {
+    agent any
+
+    tools {
+        maven 'maven'
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Build with Maven') {
+            steps {
+                dir('order-service') {
+                    sh 'mvn clean package'
+                }
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                dir('order-service') {
+                    sh "docker build -t kpkm25/order-service ."
+                }
+            }
+        }
+
+        stage('Push Docker Image') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'docker-creds', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                    sh "echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin"
+                    sh "docker push kpkm25/order-service"
+                }
+            }
+        }
+
+        stage('Deploy to Kubernetes') {
+            steps {
+                withCredentials([file(credentialsId: 'kube-trial', variable: 'KUBECONFIG_FILE')]) {
+                    sh '''
+                        export KUBECONFIG=$KUBECONFIG_FILE
+                        kubectl apply -f k8s/order-deployment.yml
+                    '''
+                }
+            }
+        }
+    }
+}
