@@ -2,7 +2,8 @@
 # Made with the help of ChatGPT
 # Exit immediately if a command exits with a non-zero status.
 set -e
-
+sudo su
+hostnamectl set-hostname master
 # Must be run as root
 if [[ $EUID -ne 0 ]]; then
    echo "❌ Please run as root or use sudo."
