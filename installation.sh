@@ -1,5 +1,4 @@
 #!/bin/bash
-# Made with the help of ChatGPT
 # Exit immediately if a command exits with a non-zero status.
 set -e
 
@@ -34,7 +33,7 @@ rm get-docker.sh
 
 echo "🔧 Adding Jenkins user to Docker group..."
 usermod -aG docker jenkins
-chown root:docker /var/run/docker.sock
+echo "🔁 A system reboot or re-login may be required for Jenkins to use Docker."
 
 echo "☸️ Setting up Kubernetes (k8s)..."
 
@@ -60,30 +59,38 @@ swapoff -a
 apt-get update -y
 apt-get install -y software-properties-common gpg curl apt-transport-https ca-certificates
 
-echo "📦 Installing CRI-O runtime..."
-mkdir -p /etc/apt/keyrings
-curl -fsSL https://pkgs.k8s.io/addons:/cri-o:/prerelease:/main/deb/Release.key | gpg --dearmor -o /etc/apt/keyrings/cri-o-apt-keyring.gpg
+echo "📦 Installing containerd (Kubernetes runtime)..."
+apt install -y containerd
 
-echo "deb [signed-by=/etc/apt/keyrings/cri-o-apt-keyring.gpg] https://pkgs.k8s.io/addons:/cri-o:/prerelease:/main/deb/ /" > /etc/apt/sources.list.d/cri-o.list
-apt-get update -y
-apt-get install -y cri-o
-systemctl daemon-reload
-systemctl enable crio --now
-systemctl start crio.service
+echo "🔧 Configuring containerd..."
+mkdir -p /etc/containerd
+containerd config default > /etc/containerd/config.toml
+sed -i 's/SystemdCgroup = false/SystemdCgroup = true/' /etc/containerd/config.toml
 
-echo "📦 Installing crictl..."
-VERSION="v1.30.0"
-wget https://github.com/kubernetes-sigs/cri-tools/releases/download/$VERSION/crictl-$VERSION-linux-amd64.tar.gz
-tar zxvf crictl-$VERSION-linux-amd64.tar.gz -C /usr/local/bin
-rm -f crictl-$VERSION-linux-amd64.tar.gz
+systemctl restart containerd
+systemctl enable containerd
+
+echo "📦 Installing crictl and configuring it for containerd..."
+CRICTL_VERSION="v1.30.0"
+wget https://github.com/kubernetes-sigs/cri-tools/releases/download/$CRICTL_VERSION/crictl-$CRICTL_VERSION-linux-amd64.tar.gz
+tar zxvf crictl-$CRICTL_VERSION-linux-amd64.tar.gz -C /usr/local/bin
+rm -f crictl-$CRICTL_VERSION-linux-amd64.tar.gz
+
+cat <<EOF > /etc/crictl.yaml
+runtime-endpoint: unix:///run/containerd/containerd.sock
+image-endpoint: unix:///run/containerd/containerd.sock
+timeout: 10
+debug: false
+EOF
 
 echo "📦 Installing kubelet, kubeadm, and kubectl..."
 KUBERNETES_VERSION=1.32
 curl -fsSL https://pkgs.k8s.io/core:/stable:/v$KUBERNETES_VERSION/deb/Release.key | gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
-
 echo "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v$KUBERNETES_VERSION/deb/ /" > /etc/apt/sources.list.d/kubernetes.list
+
 apt-get update -y
 apt-get install -y kubelet kubeadm kubectl
+systemctl enable kubelet
 
 # Ask if user wants to install python3-pip
 read -p "❓ Do you want to install python3-pip? [y/N]: " install_pip
@@ -108,18 +115,18 @@ read -p "❓ Do you want to install Ansible? [y/N]: " install_ansible
 if [[ "$install_ansible" =~ ^[Yy]$ ]]; then
     echo "📦 Installing Ansible dependencies..."
     apt install -y software-properties-common
-    
+
     echo "🔑 Adding Ansible PPA..."
     apt-add-repository -y ppa:ansible/ansible
     apt update
-    
+
     echo "⚙️ Installing Ansible..."
     apt install -y ansible
-    
+
     echo "✅ Ansible installed successfully!"
     echo "ℹ️ Version info: $(ansible --version | head -n 1)"
 else
     echo "⏭️ Skipping Ansible installation."
 fi
 
-echo "✅ Setup complete! Jenkins, Docker, and Kubernetes are installed and configured."
+echo "✅ Setup complete! Jenkins, Docker, containerd, and Kubernetes tools are installed and configured."
