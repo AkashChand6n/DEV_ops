@@ -1,0 +1,6 @@
+Prometheus
+Think about it as a time series database with a powerful query language
+    A time series database (TSDB) is a database optimized for time-stamped or time series data. 
+    Time series data are simply measurements or events that are tracked, monitored, downsampled, and aggregated over time.
+    A Time Series database is optimized for measuring change over time. 
+    Properties that make time series data very different than other data workloads are data lifecycle management, summarization, and large range scans of many records.

@@ -1,0 +1,74 @@
+Splunk Enterprise Components
+
+Splunk components are broadly divided into two categories:
+
+    1. Processing Components
+    These components are responsible for handling, processing, and storing the data.
+
+    - Search Head
+    - Handles all search-related activities.
+    - Hosts the Splunk Web interface.
+    - In highly distributed environments, multiple search heads are used for scalability.
+
+    - Forwarders
+    - Responsible for collecting and forwarding data to indexers.
+    - Do basic parsing and data pre-processing.
+    - Types:
+        - Universal Forwarder (UF) – Lightweight, used for raw data forwarding.
+        - Heavy Forwarder (HF) – Capable of parsing and filtering data before sending.
+
+    - Indexer
+    - Parses incoming data into events (i.e., rows of data).
+    - Indexes the events and stores them in time-based buckets.
+    - Enables fast search and retrieval of data.
+
+    2. Management Components
+    These components manage and monitor the Splunk environment.
+
+    - Indexer Clusters
+    - Composed of a Cluster Manager and Indexer Nodes.
+    - Provides high availability and data replication across indexers.
+
+    - Monitoring Console
+    - Provides insights into the health and performance of the Splunk environment.
+
+    - License Manager
+    - Manages Splunk license usage.
+    - All Splunk components communicate with the License Manager to verify license entitlement.
+
+    - Deployment Server
+    - Manages configurations and software updates for Splunk Universal Forwarders.
+    - Handles deployment of updates and patches across managed instances.
+
+    - Deployer
+    - Used to distribute configurations and apps to members of a Search Head Cluster in distributed environments.
+
+    Data Flow Diagram
+
+    User
+    ↓
+    Search Head  <------>  Indexer  <------  Forwarders  <------  Data Sources
+
+Splunk Configuration Management
+
+    Splunk is largely managed via configuration files, which control:
+    - System settings
+    - Indexing behavior
+    - Data inputs/outputs
+    - User authentication and authorization
+
+    Key Configuration Files:
+
+    inputs.conf    - Defines data inputs, such as file paths and source types.
+    indexes.conf   - Manages index storage locations and retention policies.
+    outputs.conf   - Defines forwarding behavior (e.g., where forwarders send data).
+    props.conf     - Handles timestamp recognition, event breaking, and field extractions.
+
+    example of configuration file 
+        [monitor:///var/log/messages]
+        disabled = 0
+        sourcetype = unixlog
+
+        Stanza Header ([monitor:///var/log/messages]): Specifies the file or directory Splunk should monitor.
+        disabled = 0: Enables the monitoring input (setting this to 1 would disable it).
+
