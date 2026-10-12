@@ -1,0 +1,8 @@
+- Never push directly to main.
+- Always create PRs.
+- GitHub Actions is the primary CI/CD platform.
+- Run Terraform fmt and validate before commit.
+- Never modify production workflows without approval.
+- Use OpenShift/Kubernetes manifests already in the repository.
+- Do not store secrets in code.
+- Always verify deployment impact before merging.

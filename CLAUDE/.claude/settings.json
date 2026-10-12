@@ -1,0 +1,32 @@
+{
+  "project_name": "CLAUDE",
+  "description": "Personal reference for Claude Code, Skills, Commands, and DevOps best practices.",
+  "claude_instructions": "CLAUDE.md",
+  "safety_rules": "KILL.md",
+  "primary_technologies": [
+    "GitHub Actions",
+    "Terraform",
+    "AWS",
+    "Kubernetes",
+    "OpenShift",
+    "CI/CD"
+  ],
+  "available_skills": [
+    ".github/skills/devops-engineer",
+    ".github/skills/terraform-reviewer",
+    ".github/skills/github-actions"
+  ],
+  "project_structure": {
+    "frontend": "Frontend applications",
+    "backend": "Backend services and APIs",
+    "infrastructure": "Infrastructure as Code (Terraform, Kubernetes)"
+  },
+  "important_rules": [
+    "Never push directly to main",
+    "Always create PRs",
+    "Run Terraform fmt and validate before commit",
+    "Never modify production workflows without approval",
+    "Do not store secrets in code",
+    "Always verify deployment impact before merging"
+  ]
+}

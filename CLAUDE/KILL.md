@@ -1,0 +1,6 @@
+- Never force push main.
+- Never disable branch protection.
+- Never skip Terraform validation.
+- Never deploy directly to production clusters.
+- Never commit credentials.
+- Never bypass required PR approvals.
